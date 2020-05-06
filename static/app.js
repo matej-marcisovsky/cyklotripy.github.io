@@ -10,7 +10,7 @@ const TRACKS_ID = 'tracks';
 
 window.addEventListener('load', () => {
 	Loader.async = true;
-	Loader.load(null, null, async () => {
+	Loader.load(null, { poi:true }, async () => {
 		initMap();
 		index = await fetchIndex();
 		initApp();
@@ -44,6 +44,17 @@ const initMap = () => {
 
 	map.addDefaultLayer(SMap.DEF_BASE).enable();
 	map.addDefaultControls();
+
+	const layerPoi = new SMap.Layer.Marker(undefined, {
+		poiTooltip: true
+	});
+	map.addLayer(layerPoi).enable();
+
+	const dataProvider = map.createDefaultDataProvider();
+	dataProvider.setOwner(map);
+	dataProvider.addLayer(layerPoi);
+	dataProvider.setMapSet(SMap.MAPSET_BASE);
+	dataProvider.enable();
 
 	const mouse = new SMap.Control.Mouse(SMap.MOUSE_PAN | SMap.MOUSE_WHEEL | SMap.MOUSE_ZOOM);
 	map.addControl(mouse);
