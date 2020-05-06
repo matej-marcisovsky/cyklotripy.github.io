@@ -1,3 +1,35 @@
+html {
+	scrollbar-width: none; /* For Firefox */
+	-ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+html::-webkit-scrollbar {
+	width: 0px; /* For Chrome, Safari, and Opera */
+}
+
+#map img {
+	max-width: unset; /* Fix Bulma for Mapy API */
+}
+
 .columns {
 	height: 100vh;
+
+	margin: 0;
+}
+
+.column {
+	padding: 0;
+}
+
+.menu {
+	padding: .75rem;
+	flex-grow: 1;
+}
+
+.column.is-flex {
+	flex-direction: column;
+}
+
+.card {
+	flex-shrink: 0;
 }

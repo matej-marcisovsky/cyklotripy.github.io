@@ -4,17 +4,42 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Cyklotripy.cz</title>
+		<link rel="stylesheet" href="/static/reset.css">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
 		<link rel="stylesheet" href="/static/style.css">
 		<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-		<script src="https://api.mapy.cz/loader.js"></script>
-		<script>Loader.load()</script>
+		<script type="text/javascript" src="https://api.mapy.cz/loader.js"></script>
+		<script src="/static/app.js"></script>
 	</head>
 	<body>
 		<div class="columns is-mobile">
 			<div id="map" class="column is-three-quarters"></div>
-			<div class="column"></div>
+			<div class="column is-flex">
+				<aside class="menu">
+					<p class="menu-label">
+						Trasy
+					</p>
+					<ul id="tracks" class="menu-list">
+						<progress class="progress is-small is-link" max="100"></progress>
+					</ul>
+				</aside>
+				<div class="card">
+					<header class="card-header is-hidden">
+						<p class="card-header-title">Údaje o tripu</p>
+					</header>
+					<div class="card-content is-hidden">
+						<p>Vzdálenost: <span id="track-distance" class="has-text-weight-bold"></span>&nbsp;<span class="has-text-weight-bold">km</span></p>
+					</div>
+					<footer class="card-footer">
+						<p class="card-footer-item">Matěj Marčišovský</p>
+						<a href="https://github.com/matej-marcisovsky/cyklotripy.github.io" class="card-footer-item" target="_blank">
+							<span class="icon is-small">
+								<i class="fab fa-github"></i>
+							</span>
+						</a>
+					</footer>
+				</div>
+			</div>
 		</div>
-		<script src="/static/app.js"></script>
 	</body>
 </html>
