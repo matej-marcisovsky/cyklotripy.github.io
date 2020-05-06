@@ -5,18 +5,16 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Cyklotripy.cz</title>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+		<link rel="stylesheet" href="/static/style.css">
 		<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+		<script src="https://api.mapy.cz/loader.js"></script>
+		<script>Loader.load()</script>
 	</head>
 	<body>
-	<section class="section">
-		<div class="container">
-			<h1 class="title">
-				Hello World
-			</h1>
-			<p class="subtitle">
-				My first website with <strong>Bulma</strong>!
-			</p>
+		<div class="columns is-mobile">
+			<div id="map" class="column is-three-quarters"></div>
+			<div class="column"></div>
 		</div>
-	</section>
+		<script src="/static/app.js"></script>
 	</body>
 </html>
