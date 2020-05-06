@@ -33,3 +33,11 @@ html::-webkit-scrollbar {
 .card {
 	flex-shrink: 0;
 }
+
+.facebook {
+	color: #3b5998;
+}
+
+.twitter {
+	color: #00acee;
+}

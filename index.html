@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Cyklotripy.cz</title>
+		<title>cyklotripy.cz: Výlety nejen na kole</title>
 		<link rel="stylesheet" href="/static/reset.css">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
 		<link rel="stylesheet" href="/static/style.css">
@@ -24,17 +24,26 @@
 					</ul>
 				</aside>
 				<div class="card">
-					<header class="card-header is-hidden">
-						<p class="card-header-title">Údaje o tripu</p>
+					<header data-track-dependent class="card-header is-hidden">
+						<p id="track-distance" class="card-header-title has-text-weight-bold is-centered"></p>
 					</header>
-					<div class="card-content is-hidden">
-						<p>Vzdálenost: <span id="track-distance" class="has-text-weight-bold"></span>&nbsp;<span class="has-text-weight-bold">km</span></p>
+					<div data-track-dependent class="card-content is-hidden">
+						<a id="track-share-facebook" target="_blank">
+							<span class="icon facebook">
+								<i class="fab fa-lg fa-facebook"></i>
+							</span>
+						</a>
+						<a id="track-share-twitter" target="_blank">
+							<span class="icon twitter">
+								<i class="fab fa-lg fa-twitter"></i>
+							</span>
+						</a>
 					</div>
 					<footer class="card-footer">
 						<p class="card-footer-item">Matěj Marčišovský</p>
 						<a href="https://github.com/matej-marcisovsky/cyklotripy.github.io" class="card-footer-item" target="_blank">
-							<span class="icon is-small">
-								<i class="fab fa-github"></i>
+							<span class="icon">
+								<i class="fab fa-lg fa-github"></i>
 							</span>
 						</a>
 					</footer>

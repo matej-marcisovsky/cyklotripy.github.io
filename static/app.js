@@ -3,6 +3,11 @@ let gpxLayer = null;
 let index = null;
 let map = null;
 
+const DOMAIN = 'cyklotripy.cz';
+const IS_ACTIVE_CLASS = 'is-active';
+const TRACK_URL_PARAMETER = 'track';
+const TRACKS_ID = 'tracks';
+
 window.addEventListener('load', () => {
 	Loader.async = true;
 	Loader.load(null, null, async () => {
@@ -11,6 +16,27 @@ window.addEventListener('load', () => {
 		initApp();
 	});
 });
+
+const getTrackUrl = track => `/trips/${track.file}`;
+
+const getUrlParameter = (name, defaultValue = '') => {
+	const pairs = location.search.substr(1).split("&");
+
+	for (const pair of pairs) {
+		const tmp = pair.split("=");
+
+		if (tmp[0] === name) {
+			return decodeURIComponent(tmp[1]);
+		}
+	}
+
+	return defaultValue;
+};
+
+const initApp = () => {
+	renderTracks(index);
+	selectTrackFromQuery();
+};
 
 const initMap = () => {
 	const point = SMap.Coords.fromWGS84(14.41, 50.08);
@@ -26,10 +52,6 @@ const initMap = () => {
 	map.addControl(sync);
 };
 
-const initApp = () => {
-	renderTracks(index);
-};
-
 const fetchIndex = async () => {
 	const response = await fetch('/static/index.json', {
 		cache: 'no-cache',
@@ -41,9 +63,19 @@ const fetchIndex = async () => {
 	return response.json();
 };
 
+const fetchTrack = async track => {
+	const response = await fetch(getTrackUrl(track), {
+		cache: 'no-cache',
+		headers: {
+			'Content-Type': 'application/xml'
+		},
+	});
+
+	return response.text();
+};
+
 const renderTracks = tracks => {
-	const IS_ACTIVE_CLASS = 'is-active';
-	const listElm = document.getElementById('tracks');
+	const listElm = document.getElementById(TRACKS_ID);
 	listElm.innerHTML = '';
 
 	tracks.forEach(track => {
@@ -51,11 +83,10 @@ const renderTracks = tracks => {
 
 		const trackButton = document.createElement('a');
 		trackButton.textContent = track.name;
+		trackButton.href = getTrackUrl(track);
 		trackButton.addEventListener('click', event => {
 			event.preventDefault();
 
-			document.querySelectorAll(`#tracks .${IS_ACTIVE_CLASS}`).forEach(child => child.classList.remove(IS_ACTIVE_CLASS));
-			trackButton.classList.add(IS_ACTIVE_CLASS);
 			selectTrack(track);
 		});
 		trackElm.appendChild(trackButton);
@@ -80,20 +111,33 @@ const selectTrack = async track => {
 	gpxLayer.enable();
 	gpxLayer.fit();
 
-	const trackDistanceElm = document.getElementById('track-distance');
-	trackDistanceElm.innerText = Math.round((track.distance / 1000 + Number.EPSILON) * 100) / 100;
+	document.querySelectorAll(`#${TRACKS_ID} .${IS_ACTIVE_CLASS}`).forEach(child => child.classList.remove(IS_ACTIVE_CLASS));
+	document.querySelector(`#${TRACKS_ID} a[href="${getTrackUrl(track)}"]`).classList.add(IS_ACTIVE_CLASS);
 
-	const trackHiddenElms = document.querySelectorAll('.card .is-hidden');
-	trackHiddenElms.forEach(trackHiddenElm => trackHiddenElm.classList.remove('is-hidden'));
+	const trackDistanceElm = document.getElementById('track-distance');
+	trackDistanceElm.innerText = `${Math.round((track.distance / 1000 + Number.EPSILON) * 100) / 100}\xa0km`;
+
+	const shareQuery = `?${TRACK_URL_PARAMETER}=${encodeURIComponent(getTrackUrl(track))}`;
+	const shareUrl = `https://${DOMAIN}${shareQuery}`;
+
+	const trackShareFacebookElm = document.getElementById('track-share-facebook');
+	trackShareFacebookElm.href = `https://www.facebook.com/sharer.php?u=${shareUrl}`;
+
+	const trackShareTwitterElm = document.getElementById('track-share-twitter');
+	trackShareTwitterElm.href = `https://twitter.com/intent/tweet?url=${shareUrl}`;
+
+	const trackDependentElms = document.querySelectorAll('[data-track-dependent]');
+	trackDependentElms.forEach(trackDependentElm => trackDependentElm.classList.remove('is-hidden'));
+
+	history.pushState(null, '', shareQuery);
 };
 
-const fetchTrack = async track => {
-	const response = await fetch(`/trips/${track.file}`, {
-		cache: 'no-cache',
-		headers: {
-			'Content-Type': 'application/xml'
-		},
-	});
+const selectTrackFromQuery = () => {
+	const trackUrl = getUrlParameter(TRACK_URL_PARAMETER);
 
-	return response.text();
+	if (trackUrl) {
+		const track = document.querySelector(`#${TRACKS_ID} a[href="${trackUrl}"]`);
+
+		track && track.click();
+	}
 };
